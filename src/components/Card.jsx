@@ -3,7 +3,6 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 
 const Card = ({ card, handleChoice, flipped, disabled }) => {
     const ref = useRef(null);
-    const [isHovering, setIsHovering] = useState(false);
 
     // Mouse position state for CSS variables
     const [styles, setStyles] = useState({
@@ -24,20 +23,21 @@ const Card = ({ card, handleChoice, flipped, disabled }) => {
     const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [15, -15]), { stiffness: 300, damping: 20 });
     const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-15, 15]), { stiffness: 300, damping: 20 });
 
-    // Combine flip and tilt rotations
-    // When not flipped: rotateY is 0. Tilt should be 0 (or subtle).
-    // When flipped: rotateY is 180. Tilt should be added to that.
-    // Note: We need to invert logic slightly because face-up is 180deg.
-    // We can just animate the container 180deg, and tilt the inner content? 
-    // CodePen rotates the whole card.
+    // 1. Setup MotionValue target for flip rotation
+    const flipTarget = useMotionValue(0);
+    // 2. Create smooth spring that follows the target
+    const flipRotation = useSpring(flipTarget, { stiffness: 260, damping: 20 });
 
-    // Let's use a computed transform for Framer Motion that adds the flip offset.
-    const flipRotation = useSpring(flipped ? 180 : 0, { stiffness: 260, damping: 20 });
+    // 3. Update target when flipped prop changes
+    useEffect(() => {
+        flipTarget.set(flipped ? 180 : 0);
+    }, [flipped, flipTarget]);
 
     // Combined Rotation Y: Flip + Tilt
     const combinedRotateY = useTransform([flipRotation, rotateY], ([f, r]) => f + r);
 
     const handleMouseMove = (e) => {
+        // Only allow tilt interaction if flipped (face up)
         if (!ref.current || !flipped) return;
 
         const rect = ref.current.getBoundingClientRect();
@@ -55,7 +55,6 @@ const Card = ({ card, handleChoice, flipped, disabled }) => {
         y.set(yPct);
 
         // CSS Variables for Halo/Shine
-        // CodePen logic roughly:
         const px = (mouseX / width) * 100;
         const py = (mouseY / height) * 100;
 
@@ -71,14 +70,11 @@ const Card = ({ card, handleChoice, flipped, disabled }) => {
             '--posy': `${50 + (yPct * 50)}%`,
             '--hyp': hyp
         });
-
-        setIsHovering(true);
     };
 
     const handleMouseLeave = () => {
         x.set(0);
         y.set(0);
-        setIsHovering(false);
         setStyles(prev => ({ ...prev, '--o': 0, '--hyp': 0 }));
     };
 
@@ -106,7 +102,8 @@ const Card = ({ card, handleChoice, flipped, disabled }) => {
                     transformStyle: "preserve-3d"
                 }}
             >
-                {/* Front (Face Down) - No holographic effect usually */}
+                {/* Front (Face Down) */}
+                {/* Important: backface-hidden ensures this layer disappears when rotated 180deg */}
                 <div
                     className="absolute w-full h-full backface-hidden bg-white/10 backdrop-blur-sm border-2 border-white/20 rounded-xl flex items-center justify-center shadow-lg hover:border-aurora-light/50 transition-colors"
                     style={{ backfaceVisibility: "hidden" }}
@@ -115,6 +112,7 @@ const Card = ({ card, handleChoice, flipped, disabled }) => {
                 </div>
 
                 {/* Back (Face Up) - HOLOGRAPHIC */}
+                {/* Important: Pre-rotated 180deg, so it appears when container rotates 180deg */}
                 <div
                     className="absolute w-full h-full backface-hidden rounded-xl overflow-hidden"
                     style={{
