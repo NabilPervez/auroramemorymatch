@@ -7,6 +7,7 @@ A high-quality, aesthetically pleasing "micro-game" that provides immediate feed
 - **Aurora Theme**: Deep purples, teals, and glowing gradients.
 - **Micro-Game**: strictly enforced 60-second timer.
 - **Physics-based Animations**: Uses Framer Motion for card flips and interactions.
+- **Holographic Cards**: Interactive 3D tilt and shader effects on rare cards managed via `holo.css`.
 - **Responsive**: 4x4 grid that fits on any device.
 
 ## Tech Stack
@@ -15,6 +16,12 @@ A high-quality, aesthetically pleasing "micro-game" that provides immediate feed
 - Tailwind CSS
 - Framer Motion
 - Lucide React Icons
+
+## Project Structure
+
+- `src/components/`: React components (Card, Grid, GameContainer, etc.)
+- `src/styles/`: Custom CSS including `holo.css` for advanced card effects.
+- `src/utils/`: Game logic and helpers.
 
 ## How to Run
 
