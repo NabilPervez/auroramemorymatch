@@ -1,0 +1,38 @@
+{
+  "packageId": "com.nabilpervez.auroramemorymatch",
+  "host": "auroramemorymatch.netlify.app",
+  "name": "Aurora Memory Match",
+  "launcherName": "Aurora",
+  "display": "standalone",
+  "orientation": "portrait",
+  "themeColor": "#2e1065",
+  "navigationColor": "#2e1065",
+  "navigationColorDark": "#2e1065",
+  "navigationDividerColor": "#2e1065",
+  "navigationDividerColorDark": "#2e1065",
+  "backgroundColor": "#2e1065",
+  "enableNotifications": false,
+  "startUrl": "/",
+  "iconUrl": "https://auroramemorymatch.netlify.app/icons/icon-512.png",
+  "maskableIconUrl": "https://auroramemorymatch.netlify.app/icons/maskable-512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./aurora-upload.keystore",
+    "alias": "upload"
+  },
+  "appVersionName": "1.0.0",
+  "appVersionCode": 1,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://auroramemorymatch.netlify.app/manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://auroramemorymatch.netlify.app/",
+  "minSdkVersion": 21
+}
